@@ -13,10 +13,14 @@ const App = () => {
     event.preventDefault()
 
     try {
-      const user = await loginService.login({
+      const logedInUser = await loginService.login({
         username, password,
       })
-      setUser(user)
+
+      window.localStorage.setItem(
+        'loggedBlogListAppUser', JSON.stringify(logedInUser)
+      )
+      setUser(logedInUser)
       setUsername('')
       setPassword('')
     } catch (exeption) {
@@ -37,6 +41,7 @@ const App = () => {
               value={username}
               name='Username'
               onChange={({ target }) => setUsername(target.value)}
+              autoComplete='off'
               />
         </div>
         <div>
@@ -46,6 +51,7 @@ const App = () => {
               value={password}
               name='Password'
               onChange={({ target }) => setPassword(target.value)}
+              autoComplete='off'
               />
         </div>
         <button type='submit'>login</button>
@@ -55,7 +61,12 @@ const App = () => {
 
   const blogForm = () => (
     <div>
-      <h3>{user.name} is loged in</h3>  
+      <h3>{user.name} is loged in&nbsp;
+        <button type='button' onClick={() => {
+          window.localStorage.removeItem('loggedBlogListAppUser')
+          setUser(null)
+        }}>logout</button>
+      </h3>
       <h2>blogs</h2>  
 
       {blogs.map(blog =>
@@ -68,6 +79,14 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
+  }, [])
+
+  useEffect(() => {
+    const logedUserJSON = window.localStorage.getItem('loggedBlogListAppUser')
+    if (logedUserJSON) {
+      const user = JSON.parse(logedUserJSON)
+      setUser(user)
+    }
   }, [])
 
 
