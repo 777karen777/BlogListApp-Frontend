@@ -57,16 +57,16 @@ const App = () => {
       "likes": newBlogsLikes, 
     }
 
-    console.log(user.token);
+    // console.log(user.token);
     
 
     try {
       const savedBlog = await blogService.create(newBlog)
+      printMessage(`New blog: "${newBlogsTitle}" by ${newBlogsAuthor} added successfully!`, 'green')
       setNewBlogsTitle('')
       setNewBlogsAuthor('')
       setNewBlogsURL('')
       setNewBlogsLikes('')
-      printMessage('New blog added successfully!', 'green')
     } catch (error) {
       printMessage(error.response.data.error, 'red')
       console.log('The Error:' , error)
