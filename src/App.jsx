@@ -17,6 +17,8 @@ const App = () => {
   const [message, setMessage] = useState(null)
   const [notificationColor, setNotificationColor] = useState('green')
 
+  const [blogAddVisible, setBlogAddVisible] = useState(false)
+
   const printMessage = (message, color) => {
     setNotificationColor(color)
     setMessage(message)
@@ -123,59 +125,73 @@ const App = () => {
     </div>
   )
 
-  const newBlogForm = () => (
-    <div>
-      <h3>Add a new Blog</h3>
-      <form onSubmit={handleNewBlogAdd} style={{
-        display: 'grid',
-        gridTemplateColumns: '120px 1fr',
-        rowGap: '10px',
-        columnGap: '10px',
-        alignItems: 'center'
+  const newBlogForm = () => {
+    const hideWhenVisible = { display: blogAddVisible ? 'none' : '' }
+    const showWhenVisible = { display: blogAddVisible ? '' : 'none' }
+    return(
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setBlogAddVisible(true)}>new note</button>
+        </div>
+      
+        <div style={showWhenVisible}>
+          <h3>Add a new Blog</h3>
+          <form onSubmit={handleNewBlogAdd} style={{
+            display: 'grid',
+            gridTemplateColumns: '120px 1fr',
+            rowGap: '10px',
+            columnGap: '10px',
+            alignItems: 'center'
 
-      }}>
-        <label htmlFor='blogTitle'>Blog title</label>          
-        <input
-          id='blogTitle'
-          type='text'
-          value={newBlogsTitle}
-          name='Blog Title'
-          onChange={({ target }) => setNewBlogsTitle(target.value)}
-        />
+          }}>
+            <label htmlFor='blogTitle'>Blog title</label>          
+            <input
+              id='blogTitle'
+              type='text'
+              value={newBlogsTitle}
+              name='Blog Title'
+              onChange={({ target }) => setNewBlogsTitle(target.value)}
+            />
+            
+            <label htmlFor='blogAuthor'>Blog Author</label>          
+            <input
+              id='blogAuthor'
+              type='text'
+              value={newBlogsAuthor}
+              name='Blog Author'
+              onChange={({ target }) => setNewBlogsAuthor(target.value)}
+            />
+
+            <label htmlFor='blogURL'>Blog URL</label>          
+            <input
+              id='blogURL'
+              type='text'
+              value={newBlogsURL}
+              name='Blog URL'
+              onChange={({ target }) => setNewBlogsURL(target.value)}
+            />
+
+            <label htmlFor='blogLikes'>Blog Likes</label>          
+            <input
+              id='blogLikes'
+              type='number'
+              value={newBlogsLikes}
+              name='Blog Likes'
+              onChange={({ target }) => setNewBlogsLikes(target.value)}
+            /> 
+
+            <div></div>
+            <button type='submit'>Save the Blog</button>
+            
+          </form>
+          <button onClick={() => setBlogAddVisible(false)}>cancel</button>
+        </div>
+
+          
+      </div>
+    )
         
-        <label htmlFor='blogAuthor'>Blog Author</label>          
-        <input
-          id='blogAuthor'
-          type='text'
-          value={newBlogsAuthor}
-          name='Blog Author'
-          onChange={({ target }) => setNewBlogsAuthor(target.value)}
-        />
-
-        <label htmlFor='blogURL'>Blog URL</label>          
-        <input
-          id='blogURL'
-          type='text'
-          value={newBlogsURL}
-          name='Blog URL'
-          onChange={({ target }) => setNewBlogsURL(target.value)}
-        />
-
-        <label htmlFor='blogLikes'>Blog Likes</label>          
-        <input
-          id='blogLikes'
-          type='number'
-          value={newBlogsLikes}
-          name='Blog Likes'
-          onChange={({ target }) => setNewBlogsLikes(target.value)}
-        /> 
-
-        <div></div>
-        <button type='submit'>Save the Blog</button>
-        
-      </form>
-    </div>
-  )
+  }
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
