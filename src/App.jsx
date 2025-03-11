@@ -118,7 +118,7 @@ const App = () => {
         }}>logout</button>
       </h3>
       <div>
-        <Togglable buttonLabel={'new note'}>
+        <Togglable buttonLabel={'new note'} >
           <NewBlogForm handleNewBlogAdd={handleNewBlogAdd} />
         </Togglable>
       </div>
