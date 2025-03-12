@@ -1,7 +1,8 @@
 import { useState } from "react"
+// import blogService from "../services/blogs"
 // import Togglable from "./Togglable"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, likeTheBlog }) => {
   const [visible, setVisible] = useState(false)
   const [label, setLabel] = useState('view')
 
@@ -17,23 +18,14 @@ const Blog = ({ blog }) => {
 
   const toggleVisibility = () => {
     setVisible(!visible)
-    setLabel(label === 'view' ? 'hide' : 'view')
+    setLabel(!visible ? 'hide' : 'view')
+  }
+
+  const handleLikeTheBlog = async() => {
+    likeTheBlog(blog)
   }
 
    
-    {/* <div>
-      <div>
-        {blog.title} {blog.author}
-      </div>
-      <Togglable showButtonLabel={'view'} hideButtonLabel={'hide'} >
-        <p>{blog.url}</p>
-        <p>
-          {blog.likes}
-          <button>like</button>
-        </p>
-        <p>{blog.user ? blog.user.name : "Unknown user"}</p>
-        </Togglable>
-    </div> */}
   return(
     <div style={blogStyle}>
       <div>
@@ -44,7 +36,7 @@ const Blog = ({ blog }) => {
         <p>{blog.url}</p>
         <p>
           {blog.likes}
-          <button>like</button>
+          <button onClick={handleLikeTheBlog}>like</button>
         </p>
         <p>{blog.user ? blog.user.name : "Unknown user"}</p>
         

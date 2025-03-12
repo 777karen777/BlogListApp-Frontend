@@ -53,31 +53,33 @@ const App = () => {
   }
 
   const handleNewBlogAdd = async (newBlog) => {
-    // event.preventDefault()
-    // const newBlog = {         
-    //   "title": newBlogsTitle,
-    //   "author": newBlogsAuthor,
-    //   "url": newBlogsURL,
-    //   "likes": newBlogsLikes, 
-    // }
-
-    console.log(newBlog);
+    
+    // console.log(newBlog);
     
 
     try {
       const savedBlog =  await blogService.create(newBlog)
       setBlogs(blogs.concat(savedBlog))
       printMessage(`New blog: "${newBlog.title}" by ${newBlog.author} added successfully!`, 'green')
-      // setNewBlogsTitle('')
-      // setNewBlogsAuthor('')
-      // setNewBlogsURL('')
-      // setNewBlogsLikes('')
+      
     } catch (error) {
       printMessage(error.response.data.error, 'red')
       console.log('The Error:' , error)
       
     }
     // console.log('adding new blog')    
+  }
+
+  const likeTheBlog = async(blog) => {
+
+    const likedBlog = {likes: blog.likes+1}
+    // const likedBlog = {...blog, likes: blog.likes+1, user: blog.user.id}
+
+    const changedBlog = await blogService.change(blog.id, likedBlog)
+    // console.log('THE liked blog: \n', likedBlog)
+    // setBlogs(blogs.map(b => b.id === blog.id ? { ...b, likes: changedBlog.likes } : b))
+    setBlogs(blogs.map(b => b.id === blog.id ? changedBlog: b))
+
   }
 
   const loginForm = () => (
@@ -125,83 +127,11 @@ const App = () => {
       <h2>blogs</h2>  
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeTheBlog={likeTheBlog} />
       )}
     </div>
   )
 
-  // const newBlogForm = () => {
-  //   return (
-  //     <Togglable buttonLabel={'new note'}>
-  //       <NewBlogForm handleNewBlogAdd={handleNewBlogAdd} />
-  //     </Togglable>
-  //   )
-  // //   const hideWhenVisible = { display: blogAddVisible ? 'none' : '' }
-  // //   const showWhenVisible = { display: blogAddVisible ? '' : 'none' }
-  // //   return(
-  // //     <div>
-  // //       <div style={hideWhenVisible}>
-  // //         <button onClick={() => setBlogAddVisible(true)}>new note</button>
-  // //       </div>
-      
-  // //       <div style={showWhenVisible}>
-  // //         <h3>Add a new Blog</h3>
-  // //         <form onSubmit={handleNewBlogAdd} style={{
-  // //           display: 'grid',
-  // //           gridTemplateColumns: '120px 1fr',
-  // //           rowGap: '10px',
-  // //           columnGap: '10px',
-  // //           alignItems: 'center'
-
-  // //         }}>
-  // //           <label htmlFor='blogTitle'>Blog title</label>          
-  // //           <input
-  // //             id='blogTitle'
-  // //             type='text'
-  // //             value={newBlogsTitle}
-  // //             name='Blog Title'
-  // //             onChange={({ target }) => setNewBlogsTitle(target.value)}
-  // //           />
-            
-  // //           <label htmlFor='blogAuthor'>Blog Author</label>          
-  // //           <input
-  // //             id='blogAuthor'
-  // //             type='text'
-  // //             value={newBlogsAuthor}
-  // //             name='Blog Author'
-  // //             onChange={({ target }) => setNewBlogsAuthor(target.value)}
-  // //           />
-
-  // //           <label htmlFor='blogURL'>Blog URL</label>          
-  // //           <input
-  // //             id='blogURL'
-  // //             type='text'
-  // //             value={newBlogsURL}
-  // //             name='Blog URL'
-  // //             onChange={({ target }) => setNewBlogsURL(target.value)}
-  // //           />
-
-  // //           <label htmlFor='blogLikes'>Blog Likes</label>          
-  // //           <input
-  // //             id='blogLikes'
-  // //             type='number'
-  // //             value={newBlogsLikes}
-  // //             name='Blog Likes'
-  // //             onChange={({ target }) => setNewBlogsLikes(target.value)}
-  // //           /> 
-
-  // //           <div></div>
-  // //           <button type='submit'>Save the Blog</button>
-            
-  // //         </form>
-  // //         <button onClick={() => setBlogAddVisible(false)}>cancel</button>
-  // //       </div>
-
-          
-  // //     </div>
-  // //   )
-        
-  // }
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
