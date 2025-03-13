@@ -30,6 +30,8 @@ const App = () => {
     }, 5000)
   }
 
+  const compareBlogsLikes = (a, b) => b.likes - a.likes 
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -64,7 +66,7 @@ const App = () => {
       
     } catch (error) {
       printMessage(error.response.data.error, 'red')
-      console.log('The Error:' , error)
+      // console.log('The Error:' , error)
       
     }
     // console.log('adding new blog')    
@@ -74,11 +76,17 @@ const App = () => {
 
     const likedBlog = {likes: blog.likes+1}
     // const likedBlog = {...blog, likes: blog.likes+1, user: blog.user.id}
-
-    const changedBlog = await blogService.change(blog.id, likedBlog)
-    // console.log('THE liked blog: \n', likedBlog)
-    // setBlogs(blogs.map(b => b.id === blog.id ? { ...b, likes: changedBlog.likes } : b))
-    setBlogs(blogs.map(b => b.id === blog.id ? changedBlog: b))
+    try {
+      const changedBlog = await blogService.change(blog.id, likedBlog)
+      // console.log('THE liked blog: \n', likedBlog)
+      // setBlogs(blogs.map(b => b.id === blog.id ? { ...b, likes: changedBlog.likes } : b))
+      let updatedBlogs = blogs.map(b => b.id === blog.id ? changedBlog: b)
+      setBlogs(updatedBlogs.sort(compareBlogsLikes))
+      
+    } catch (error) {
+      printMessage(error.response.data.error, 'red')
+      // console.log('The Error:' , error)
+    }
 
   }
 
@@ -133,10 +141,33 @@ const App = () => {
   )
 
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
+  const fetchBlogs = async () => {
+    try {
+      const blogs = await blogService.getAll() 
+      blogs.sort(compareBlogsLikes)
       setBlogs( blogs )
-    )  
+      
+    } catch (error) {
+      printMessage(error.response.data.error, 'red')
+
+    }
+  }
+  
+  useEffect(() => {
+    // async function fetchBlogs() {
+    //   try {
+    //     const blogs = await blogService.getAll() 
+    //     blogs.sort(compareBlogsLikes)
+    //     setBlogs( blogs )
+        
+    //   } catch (error) {
+    //     printMessage(error.response.data.error, 'red')
+
+    //   }
+    // }
+
+    fetchBlogs()
+      
   }, [])
 
   useEffect(() => {
