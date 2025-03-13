@@ -90,6 +90,19 @@ const App = () => {
 
   }
 
+  const removeBlog = async(blogToRemove) => {
+    const result = confirm(`Remove blog "${blogToRemove.title}" by ${blogToRemove.author} ?`)
+    if(result) {
+      try {
+        await blogService.remove(blogToRemove.id)
+        setBlogs(blogs.filter(b => b.id !== blogToRemove.id))
+        printMessage('Blog removed successfully !', 'green')
+      } catch (error) {
+        printMessage(error.response.data.error, 'red')
+      }
+    }
+  }
+
   const loginForm = () => (
     <div>
       <h2>Log in to application</h2>
@@ -135,7 +148,13 @@ const App = () => {
       <h2>blogs</h2>  
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeTheBlog={likeTheBlog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          likeTheBlog={likeTheBlog}
+          removeBlog={removeBlog} 
+          user={user} 
+        />
       )}
     </div>
   )

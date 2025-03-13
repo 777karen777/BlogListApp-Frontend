@@ -2,18 +2,30 @@ import { useState } from "react"
 // import blogService from "../services/blogs"
 // import Togglable from "./Togglable"
 
-const Blog = ({ blog, likeTheBlog }) => {
+const Blog = ({ blog, likeTheBlog, removeBlog, user }) => {
   const [visible, setVisible] = useState(false)
   const [label, setLabel] = useState('view')
 
   // const hideWhenVisible = { display: visible ? 'none' : ''}
   const showWhenVisible = { display: visible ? '' : 'none'}
+  const ownerUsername = blog.user ? blog.user.username : null
+  const isOwner = user.username === ownerUsername
+ 
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+
+  const removeButtonStyle = {
+    backgroundColor: '#2959ab',
+    // color: 'black',
+    border: 'none',
+    padding: '3px 10px',
+    cursor: 'pointer',
+    borderRadius: '5px'
   }
 
   const toggleVisibility = () => {
@@ -25,6 +37,11 @@ const Blog = ({ blog, likeTheBlog }) => {
     likeTheBlog(blog)
   }
 
+  const handleRemove = async() => {
+    removeBlog(blog)
+    // console.log('clicked')
+  }
+
    
   return(
     <div style={blogStyle}>
@@ -33,12 +50,14 @@ const Blog = ({ blog, likeTheBlog }) => {
         <button onClick={toggleVisibility}>{label}</button>
       </div>  
       <div style={showWhenVisible}>
-        <p>{blog.url}</p>
-        <p>
+        <div>{blog.url}</div>
+        <div>
           {blog.likes}
           <button onClick={handleLikeTheBlog}>like</button>
-        </p>
-        <p>{blog.user ? blog.user.name : "Unknown user"}</p>
+        </div>
+        <div>{blog.user ? blog.user.name : "Unknown user"}</div>
+        <p>{isOwner && <button onClick={handleRemove} style={removeButtonStyle}>remove</button>}</p>
+
         
       </div>  
 
