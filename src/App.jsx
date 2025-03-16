@@ -30,7 +30,7 @@ const App = () => {
     }, 5000)
   }
 
-  const compareBlogsLikes = (a, b) => b.likes - a.likes 
+  const compareBlogsLikes = (a, b) => b.likes - a.likes
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -48,33 +48,33 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exeption) {
-      console.log('Wrong Credentials', exeption)      
+      console.log('Wrong Credentials', exeption)
     }
     console.log('loging in with ', username, password)
-    
+
   }
 
   const handleNewBlogAdd = async (newBlog) => {
-    
+
     // console.log(newBlog);
-    
+
 
     try {
       const savedBlog =  await blogService.create(newBlog)
       setBlogs(blogs.concat(savedBlog))
       printMessage(`New blog: "${newBlog.title}" by ${newBlog.author} added successfully!`, 'green')
-      
+
     } catch (error) {
       printMessage(error.response.data.error, 'red')
       // console.log('The Error:' , error)
-      
+
     }
-    // console.log('adding new blog')    
+    // console.log('adding new blog')
   }
 
   const likeTheBlog = async(blog) => {
 
-    const likedBlog = {likes: blog.likes+1}
+    const likedBlog = { likes: blog.likes+1 }
     // const likedBlog = {...blog, likes: blog.likes+1, user: blog.user.id}
     try {
       const changedBlog = await blogService.change(blog.id, likedBlog)
@@ -82,7 +82,7 @@ const App = () => {
       // setBlogs(blogs.map(b => b.id === blog.id ? { ...b, likes: changedBlog.likes } : b))
       let updatedBlogs = blogs.map(b => b.id === blog.id ? changedBlog: b)
       setBlogs(updatedBlogs.sort(compareBlogsLikes))
-      
+
     } catch (error) {
       printMessage(error.response.data.error, 'red')
       // console.log('The Error:' , error)
@@ -109,23 +109,23 @@ const App = () => {
       <form onSubmit={handleLogin}>
         <div>
           username&nbsp;
-            <input
-              type='text'
-              value={username}
-              name='Username'
-              onChange={({ target }) => setUsername(target.value)}
-              autoComplete='off'
-              />
+          <input
+            type='text'
+            value={username}
+            name='Username'
+            onChange={({ target }) => setUsername(target.value)}
+            autoComplete='off'
+          />
         </div>
         <div>
           password&nbsp;
-            <input
-              type='text'
-              value={password}
-              name='Password'
-              onChange={({ target }) => setPassword(target.value)}
-              autoComplete='off'
-              />
+          <input
+            type='text'
+            value={password}
+            name='Password'
+            onChange={({ target }) => setPassword(target.value)}
+            autoComplete='off'
+          />
         </div>
         <button type='submit'>login</button>
       </form>
@@ -145,16 +145,18 @@ const App = () => {
           <NewBlogForm handleNewBlogAdd={handleNewBlogAdd} />
         </Togglable>
       </div>
-      <h2>blogs</h2>  
+      <h2>blogs</h2>
 
       {blogs.map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          likeTheBlog={likeTheBlog}
-          removeBlog={removeBlog} 
-          user={user} 
-        />
+        {user && user.id && blog.user && (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            likeTheBlog={likeTheBlog}
+            removeBlog={removeBlog}
+            user={user}
+          />
+        )}
       )}
     </div>
   )
@@ -162,23 +164,23 @@ const App = () => {
 
   const fetchBlogs = async () => {
     try {
-      const blogs = await blogService.getAll() 
+      const blogs = await blogService.getAll()
       blogs.sort(compareBlogsLikes)
       setBlogs( blogs )
-      
+
     } catch (error) {
       printMessage(error.response.data.error, 'red')
 
     }
   }
-  
+
   useEffect(() => {
     // async function fetchBlogs() {
     //   try {
-    //     const blogs = await blogService.getAll() 
+    //     const blogs = await blogService.getAll()
     //     blogs.sort(compareBlogsLikes)
     //     setBlogs( blogs )
-        
+
     //   } catch (error) {
     //     printMessage(error.response.data.error, 'red')
 
@@ -186,7 +188,7 @@ const App = () => {
     // }
 
     fetchBlogs()
-      
+
   }, [])
 
   useEffect(() => {
