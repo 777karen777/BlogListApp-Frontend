@@ -148,7 +148,7 @@ const App = () => {
       <h2>blogs</h2>
 
       {blogs.map(blog =>
-        {user && user.id && blog.user && (
+        user && blog.user && (
           <Blog
             key={blog.id}
             blog={blog}
@@ -156,7 +156,7 @@ const App = () => {
             removeBlog={removeBlog}
             user={user}
           />
-        )}
+        )
       )}
     </div>
   )

@@ -46,7 +46,7 @@ const Blog = ({ blog, likeTheBlog, removeBlog, user }) => {
 
   return(
     <div style={blogStyle}>
-      <div>
+      <div className='blog'>
         {blog.title} {blog.author}
         <button onClick={toggleVisibility}>{label}</button>
       </div>
@@ -84,7 +84,6 @@ Blog.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
   }).isRequired,
 }
 
