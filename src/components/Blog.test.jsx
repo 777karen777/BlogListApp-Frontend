@@ -1,28 +1,58 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
-import { expect } from "vitest"
+import { exact } from 'prop-types'
+import userEvent from '@testing-library/user-event'
+import { expect } from 'vitest'
+// import { expect } from 'vitest'
 
-test('renders the blog\'s title and author', () => {
-    const blog = {
-       title: "Blog 10",
-        author: "Mskf",
-        url: "url_String77",
-        likes: 78 
-    }
+test('renders the blog\'s title and author', async () => {
+  const blog = {
+    title: 'Blog 10',
+    author: 'Mskf',
+    url: 'url_String77',
+    likes: 78
+  }
 
-    const user = {
-        username: "testUser",
-        name: "Test User"
-    }
+  const blogsUser = {
+    username: 'testUser',
+    name: 'Test User'
+  }
 
-    render(<Blog blog={blog} user={user}/>)
+  const likeTheBlog = vi.fn()
+  const removeBlog = vi.fn()
 
-    expect(screen.getByText(/Blog 10\s+Mskf/i)).toBeDefined()
 
-    expect(screen.queryByText("url_String77", { exact: true, hidden: false })).not.toBeVisible()
-    expect(screen.queryByText("78", { exact: true, hidden: false })).not.toBeVisible()
+  const user = userEvent.setup()
+   
+  
+  const { container } = render(<Blog
+        blog={blog}
+        user={blogsUser}
+        likeTheBlog={likeTheBlog}
+        removeBlog={removeBlog}
+    />)
+    const div = container.querySelector('.blog')
+    // const button = screen.getByText('view')
+    const button = screen.getByTestId('view')
 
-    // screen.debug()
+  expect(div).toHaveTextContent('Blog 10')
+  expect(div).toHaveTextContent('Mskf')
+  // console.log(div);
 
-    
+  //   expect(div).not.toHaveTextContent('url_String77', { exact: true, hidden: false })
+
+  //   expect(screen.getByText(/Blog 10\s+Mskf/i)).toBeDefined()
+
+  expect(screen.queryByText('url_String77')).not.toBeVisible()
+  expect(screen.queryByText('78')).not.toBeVisible()
+  
+  await user.click(button)
+  expect(screen.queryByText('url_String77')).toBeVisible()
+  expect(screen.queryByText('78')).toBeVisible()
+
+//   expect()
+
+  // screen.debug()
+
+
 })

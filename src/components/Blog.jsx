@@ -45,10 +45,10 @@ const Blog = ({ blog, likeTheBlog, removeBlog, user }) => {
 
 
   return(
-    <div style={blogStyle}>
-      <div className='blog'>
+    <div style={blogStyle}  className='blog' >
+      <div>
         {blog.title} {blog.author}
-        <button onClick={toggleVisibility}>{label}</button>
+        <button data-testid="view" onClick={toggleVisibility}>{label}</button>
       </div>
       <div style={showWhenVisible}>
         <div>{blog.url}</div>
