@@ -33,7 +33,7 @@ test('renders the blog\'s title and author', async () => {
     />)
     const div = container.querySelector('.blog')
     // const button = screen.getByText('view')
-    const button = screen.getByTestId('view')
+    const viewButton = screen.getByTestId('view')
 
   expect(div).toHaveTextContent('Blog 10')
   expect(div).toHaveTextContent('Mskf')
@@ -46,9 +46,17 @@ test('renders the blog\'s title and author', async () => {
   expect(screen.queryByText('url_String77')).not.toBeVisible()
   expect(screen.queryByText('78')).not.toBeVisible()
   
-  await user.click(button)
+  await user.click(viewButton)
   expect(screen.queryByText('url_String77')).toBeVisible()
   expect(screen.queryByText('78')).toBeVisible()
+
+  const likeButton = screen.getByTestId('like')
+
+  for (let i = 0; i < 2; i++) {
+    await user.click(likeButton)
+  }
+
+  expect(likeTheBlog.mock.calls).toHaveLength(2)
 
 //   expect()
 
