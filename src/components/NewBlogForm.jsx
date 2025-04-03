@@ -6,7 +6,7 @@ const NewBlogForm = ({ handleNewBlogAdd }) => {
   const [newBlogsTitle, setNewBlogsTitle] = useState('')
   const [newBlogsAuthor, setNewBlogsAuthor] = useState('')
   const [newBlogsURL, setNewBlogsURL] = useState('')
-  const [newBlogsLikes, setNewBlogsLikes] = useState(0)
+  const [newBlogsLikes, setNewBlogsLikes] = useState('')
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -75,7 +75,7 @@ const NewBlogForm = ({ handleNewBlogAdd }) => {
         />
 
         <div></div>
-        <button type='submit'>Save the Blog</button>
+        <button type='submit' id='saveBlog' >Save the Blog</button>
 
       </form>
     </div>

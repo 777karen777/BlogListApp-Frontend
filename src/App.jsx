@@ -61,7 +61,8 @@ const App = () => {
 
     try {
       const savedBlog =  await blogService.create(newBlog)
-      setBlogs(blogs.concat(savedBlog))
+      let updatedBlogs = blogs.concat(savedBlog)
+      setBlogs(updatedBlogs.sort(compareBlogsLikes))
       printMessage(`New blog: "${newBlog.title}" by ${newBlog.author} added successfully!`, 'green')
 
     } catch (error) {

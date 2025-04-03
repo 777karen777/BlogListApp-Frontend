@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
 import { exact } from 'prop-types'
 import userEvent from '@testing-library/user-event'
-import { expect } from 'vitest'
+// import { expect } from 'vitest'
 // import { expect } from 'vitest'
 
 test('renders the blog\'s title and author', async () => {
@@ -23,17 +23,17 @@ test('renders the blog\'s title and author', async () => {
 
 
   const user = userEvent.setup()
-   
-  
+
+
   const { container } = render(<Blog
-        blog={blog}
-        user={blogsUser}
-        likeTheBlog={likeTheBlog}
-        removeBlog={removeBlog}
-    />)
-    const div = container.querySelector('.blog')
-    // const button = screen.getByText('view')
-    const viewButton = screen.getByTestId('view')
+    blog={blog}
+    user={blogsUser}
+    likeTheBlog={likeTheBlog}
+    removeBlog={removeBlog}
+  />)
+  const div = container.querySelector('.blog')
+  // const button = screen.getByText('view')
+  const viewButton = screen.getByTestId('view')
 
   expect(div).toHaveTextContent('Blog 10')
   expect(div).toHaveTextContent('Mskf')
@@ -45,7 +45,7 @@ test('renders the blog\'s title and author', async () => {
 
   expect(screen.queryByText('url_String77')).not.toBeVisible()
   expect(screen.queryByText('78')).not.toBeVisible()
-  
+
   await user.click(viewButton)
   expect(screen.queryByText('url_String77')).toBeVisible()
   expect(screen.queryByText('78')).toBeVisible()
@@ -58,7 +58,7 @@ test('renders the blog\'s title and author', async () => {
 
   expect(likeTheBlog.mock.calls).toHaveLength(2)
 
-//   expect()
+  //   expect()
 
   // screen.debug()
 
